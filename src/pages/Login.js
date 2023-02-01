@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { submitEmail } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -39,7 +40,8 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { dispatch, history } = this.props;
-    dispatch();
+    const { email } = this.state;
+    dispatch(submitEmail(email));
     history.push('/carteira');
   };
 
@@ -59,6 +61,7 @@ class Login extends Component {
           value={ password }
           name="password"
           type="password"
+          data-testid="password-input"
           onChange={ this.handleChange }
         />
         <button
