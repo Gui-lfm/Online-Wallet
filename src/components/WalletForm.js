@@ -6,10 +6,11 @@ import { fetchAPI } from '../redux/actions';
 class WalletForm extends Component {
   state = {
     value: '',
-    selectedCurrency: '',
-    method: '',
+    selectedCurrency: 'USD',
+    method: 'Dinheiro',
     description: '',
-    tag: '',
+    tag: 'Alimentação',
+    expenses: [],
   };
 
   componentDidMount() {
@@ -20,6 +21,25 @@ class WalletForm extends Component {
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { value, selectedCurrency, method, description, tag, expenses } = this.state;
+
+    const newExpense = {
+      id: expenses.length > 0 ? expenses[expenses.length - 1].id + 1 : 0,
+      value,
+      selectedCurrency,
+      method,
+      description,
+      tag,
+      exchangeRates: '',
+    };
+
+    this.setState({
+      expenses: [...expenses, newExpense],
+    });
   };
 
   render() {
@@ -97,7 +117,9 @@ class WalletForm extends Component {
             <option>Saúde</option>
           </select>
         </label>
-        <button type="submit">Adicionar despesa</button>
+        <button type="submit" onClick={ this.handleSubmit }>
+          Adicionar despesa
+        </button>
       </form>
     );
   }
