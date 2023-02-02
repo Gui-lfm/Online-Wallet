@@ -34,8 +34,8 @@ class WalletForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const { dispatch } = this.props;
     const { value, selectedCurrency, method, description, tag, expenses } = this.state;
+    const { sendExpenses } = this.props;
     const currentRate = await this.fetchExchangeRates();
 
     const newExpense = {
@@ -49,10 +49,16 @@ class WalletForm extends Component {
     };
 
     this.setState({
+      value: '',
+      selectedCurrency: 'USD',
+      method: 'Dinheiro',
+      description: '',
+      tag: 'Alimentação',
       expenses: [...expenses, newExpense],
+    }, () => {
+      const { expenses: Savedexpenses } = this.state;
+      sendExpenses(Savedexpenses);
     });
-
-    dispatch(submitExpenses(expenses));
   };
 
   render() {
@@ -139,8 +145,8 @@ class WalletForm extends Component {
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dispatch: PropTypes.func.isRequired,
   requestCurrencies: PropTypes.func.isRequired,
+  sendExpenses: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -149,6 +155,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   requestCurrencies: () => dispatch(fetchAPI()),
+  sendExpenses: (expenses) => dispatch(submitExpenses(expenses)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);
