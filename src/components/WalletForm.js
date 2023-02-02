@@ -41,7 +41,7 @@ class WalletForm extends Component {
     const newExpense = {
       id: expenses.length > 0 ? expenses[expenses.length - 1].id + 1 : 0,
       value,
-      selectedCurrency,
+      currency: selectedCurrency,
       method,
       description,
       tag,
