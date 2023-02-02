@@ -50,20 +50,30 @@ class Login extends Component {
 
     return (
       <form>
-        <input
-          value={ email }
-          name="email"
-          type="email"
-          data-testid="email-input"
-          onChange={ this.handleChange }
-        />
-        <input
-          value={ password }
-          name="password"
-          type="password"
-          data-testid="password-input"
-          onChange={ this.handleChange }
-        />
+        <label htmlFor="email">
+          Email
+          <input
+            id="email"
+            value={ email }
+            name="email"
+            type="email"
+            data-testid="email-input"
+            onChange={ this.handleChange }
+          />
+        </label>
+
+        <label htmlFor="password">
+          Senha
+          <input
+            id="password"
+            value={ password }
+            name="password"
+            type="password"
+            data-testid="password-input"
+            onChange={ this.handleChange }
+          />
+        </label>
+
         <button
           type="submit "
           disabled={ isSubmitBtnDisabled }
