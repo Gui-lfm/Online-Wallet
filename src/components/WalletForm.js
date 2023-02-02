@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchAPI } from '../redux/actions';
+import { fetchAPI, submitExpenses } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
@@ -23,9 +23,20 @@ class WalletForm extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = (e) => {
+  fetchExchangeRates = async () => {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const data = await response.json();
+    const USDT = 'USDT';
+    delete data[USDT];
+
+    return data;
+  };
+
+  handleSubmit = async (e) => {
     e.preventDefault();
+    const { dispatch } = this.props;
     const { value, selectedCurrency, method, description, tag, expenses } = this.state;
+    const currentRate = await this.fetchExchangeRates();
 
     const newExpense = {
       id: expenses.length > 0 ? expenses[expenses.length - 1].id + 1 : 0,
@@ -34,12 +45,14 @@ class WalletForm extends Component {
       method,
       description,
       tag,
-      exchangeRates: '',
+      exchangeRates: currentRate,
     };
 
     this.setState({
       expenses: [...expenses, newExpense],
     });
+
+    dispatch(submitExpenses(expenses));
   };
 
   render() {
@@ -58,7 +71,6 @@ class WalletForm extends Component {
             onChange={ this.handleChange }
           />
         </label>
-
         <label htmlFor="moeda">
           Moeda:
           <select
@@ -126,7 +138,8 @@ class WalletForm extends Component {
 }
 
 WalletForm.propTypes = {
-  currencies: PropTypes.string.isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dispatch: PropTypes.func.isRequired,
   requestCurrencies: PropTypes.func.isRequired,
 };
 

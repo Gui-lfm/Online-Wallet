@@ -1,4 +1,4 @@
-import { REQUEST_SUCESS } from '../actions';
+import { REQUEST_SUCESS, SUBMIT_EXPENSES } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -14,7 +14,11 @@ const walletReducer = (state = INITIAL_STATE, action) => {
       ...state,
       currencies: action.data,
     };
-
+  case SUBMIT_EXPENSES:
+    return {
+      ...state,
+      expenses: action.expenses,
+    };
   default:
     return state;
   }

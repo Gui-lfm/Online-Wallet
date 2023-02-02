@@ -75,7 +75,7 @@ class Login extends Component {
         </label>
 
         <button
-          type="submit "
+          type="submit"
           disabled={ isSubmitBtnDisabled }
           onClick={ this.handleSubmit }
         >
