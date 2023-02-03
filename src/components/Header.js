@@ -20,7 +20,6 @@ class Header extends Component {
 
   render() {
     const { email } = this.props;
-    console.log(this.handleTotalField());
     const totalField = this.handleTotalField();
     return (
       <header>
