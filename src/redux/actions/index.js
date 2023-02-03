@@ -3,6 +3,7 @@ export const SUBMIT_EXPENSES = 'SUBMIT_EXPENSES';
 export const REQUEST_CURRENCIES = 'REQUEST_CURRENCIES';
 export const REQUEST_SUCESS = 'REQUEST_SUCESS';
 export const REQUEST_FAILED = 'REQUEST_FAILED';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const submitEmail = (email) => ({
   type: SUBMIT_EMAIL,
@@ -12,6 +13,11 @@ export const submitEmail = (email) => ({
 export const submitExpenses = (expenses) => ({
   type: SUBMIT_EXPENSES,
   expenses,
+});
+
+export const deleteExpense = (id) => ({
+  type: DELETE_EXPENSE,
+  id,
 });
 
 const requestCurrencies = () => ({
