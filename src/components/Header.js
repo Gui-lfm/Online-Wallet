@@ -6,7 +6,7 @@ class Header extends Component {
   handleTotalField = () => {
     const { expenses } = this.props;
     let total = 0;
-    if (expenses.length > 0) {
+    if (expenses) {
       expenses.map((expense) => {
         const currentValue = expense.value;
         const currentExchangeRate = expense.exchangeRates[expense.currency].ask;
@@ -24,7 +24,10 @@ class Header extends Component {
     const totalField = this.handleTotalField();
     return (
       <header>
-        <p data-testid="email-field">{email}</p>
+        {email
+          ? <p data-testid="email-field">{email}</p>
+          : <p data-testid="email-field">Usuário anônimo</p>}
+
         <div>
           Despesa total:
           {' '}
