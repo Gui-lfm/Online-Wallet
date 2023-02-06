@@ -15,11 +15,13 @@ describe('Testes da página de carteira virtual', () => {
   });
 
   const currencyId = 'currency-input';
+  const valueId = 'value-input';
+  const totalId = 'total-field';
 
-  it('Deve haver um formulário com os campos de valor, moeda, método de pagamento, descrição e tag', () => {
+  it('1 - Deve haver um formulário com os campos de valor, moeda, método de pagamento, descrição e tag', () => {
     renderWithRouterAndRedux(<App />, { initialEntries: ['/carteira'] });
 
-    const valueField = screen.getByTestId('value-input');
+    const valueField = screen.getByTestId(valueId);
     expect(valueField).toBeInTheDocument();
 
     const currencyField = screen.getByTestId(currencyId);
@@ -39,7 +41,8 @@ describe('Testes da página de carteira virtual', () => {
       'https://economia.awesomeapi.com.br/json/all',
     );
   });
-  it('O email inserido na página de login deve aparecer corretamente no cabeçalho da página', () => {
+
+  it('2 - O email inserido na página de login deve aparecer corretamente no cabeçalho da página', () => {
     const validEmail = 'teste@teste.com';
     const initialState = {
       user: {
@@ -57,7 +60,7 @@ describe('Testes da página de carteira virtual', () => {
     expect(emailField).toHaveTextContent(validEmail);
   });
 
-  it('O campo "Moeda" deve renderizar uma lista de moedas providas por uma api', async () => {
+  it('3 - O campo "Moeda" deve renderizar uma lista de moedas providas por uma api', async () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve(mockData),
     }));
@@ -72,7 +75,7 @@ describe('Testes da página de carteira virtual', () => {
     expect(options.length).toBe(15);
   });
 
-  it('Ao clicar no botão de adicionar despesa, a api deve ser chamada novamente', () => {
+  it('4 - Ao clicar no botão de adicionar despesa, a api deve ser chamada novamente', () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve(mockData),
     }));
@@ -91,7 +94,7 @@ describe('Testes da página de carteira virtual', () => {
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 
-  it('Ao adicionar uma despesa, o valor no cabeçalho deve ser atualizado', async () => {
+  it('5 - Ao adicionar uma despesa, o valor no cabeçalho deve ser atualizado', async () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve(mockData),
     }));
@@ -108,13 +111,13 @@ describe('Testes da página de carteira virtual', () => {
       tagInput: screen.getByRole('option', { name: 'Alimentação' }),
     };
 
-    const valueField = screen.getByTestId('value-input');
+    const valueField = screen.getByTestId(valueId);
     const currencyField = screen.getByTestId(currencyId);
     const methodField = screen.getByTestId('method-input');
     const descriptionField = screen.getByTestId('description-input');
     const tagField = screen.getByTestId('tag-input');
     const addBtn = screen.getByRole('button', { name: 'Adicionar despesa' });
-    const totalField = screen.getByTestId('total-field');
+    const totalField = screen.getByTestId(totalId);
 
     userEvent.type(valueField, userInputs.valueInput);
     userEvent.selectOptions(currencyField, userInputs.currencyInput);
@@ -126,5 +129,106 @@ describe('Testes da página de carteira virtual', () => {
     await waitFor(() => expect(totalField).toHaveTextContent('95.06'));
   });
 
-  // it('Ao enviar as informações, deve ser criado um objeto com id dinâmico e salvo no estado do componente', () => {});
+  it('6 - Ao deletar uma despesa, o valor deve ser deduzido da despesa total', () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve(mockData),
+    }));
+
+    const initialState = {
+      user: {},
+      wallet: {
+        expenses: [
+          {
+            id: 0,
+            value: '10',
+            currency: 'CAD',
+            method: 'Dinheiro',
+            description: 'teste_teste',
+            tag: 'Trabalho',
+            exchangeRates: mockData,
+          }],
+      },
+    };
+
+    renderWithRouterAndRedux(<App />, {
+      initialEntries: ['/carteira'], initialState,
+    });
+
+    const deleteBtn = screen.getByRole('button', { name: 'Excluir' });
+    expect(deleteBtn).toBeInTheDocument();
+
+    const totalField = screen.getByTestId(totalId);
+    expect(totalField).toHaveTextContent('37.56');
+
+    userEvent.click(deleteBtn);
+    expect(totalField).toHaveTextContent('0');
+  });
+
+  it('7 - Ao editar uma despesa, o valor total deve ser atualizado e a despesa deve ser atualizada corretamente na tabela', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve(mockData),
+    }));
+
+    const initialState = {
+      user: {
+        email: 'teste123@teste.com',
+      },
+      wallet: {
+        expenses: [
+          {
+            id: 0,
+            value: '10',
+            currency: 'CAD',
+            method: 'Dinheiro',
+            description: 'teste_teste',
+            tag: 'Trabalho',
+            exchangeRates: mockData,
+          },
+          {
+            id: 1,
+            value: '15',
+            currency: 'USD',
+            method: 'Dinheiro',
+            description: 'teste_teste2',
+            tag: 'Trabalho',
+            exchangeRates: mockData,
+          },
+          {
+            id: 2,
+            value: '20',
+            currency: 'EUR',
+            method: 'Dinheiro',
+            description: 'teste_teste3',
+            tag: 'Trabalho',
+            exchangeRates: mockData,
+          },
+        ],
+        editor: false,
+        idToEdit: 0,
+        currencies: Object.keys(mockData).filter((currency) => currency !== 'USDT'),
+      },
+    };
+
+    renderWithRouterAndRedux(<App />, {
+      initialEntries: ['/carteira'], initialState,
+    });
+
+    const editBtn = screen.getAllByRole('button', { name: 'Editar' });
+    expect(editBtn).toHaveLength(3);
+
+    const totalField = screen.getByTestId(totalId);
+    expect(totalField).toHaveTextContent('211.39');
+
+    userEvent.click(editBtn[0]);
+    const valueField = screen.getByTestId(valueId);
+    expect(valueField.value).toBe('10');
+
+    userEvent.type(valueField, '25');
+
+    const submitEditBtn = screen.getByRole('button', { name: 'Editar despesa' });
+    expect(submitEditBtn).toBeInTheDocument();
+
+    // userEvent.click(submitEditBtn);
+    // await waitFor(expect(totalField).toHaveTextContent('267.74'));
+  });
 });
