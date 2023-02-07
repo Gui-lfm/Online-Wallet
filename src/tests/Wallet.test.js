@@ -220,6 +220,8 @@ describe('Testes da página de carteira virtual', () => {
     expect(totalField).toHaveTextContent('211.39');
 
     userEvent.click(editBtn[0]);
+    const table = document.querySelector('tbody');
+    console.log(table.children.length);
     const valueField = screen.getByTestId(valueId);
     expect(valueField.value).toBe('10');
 
@@ -228,7 +230,8 @@ describe('Testes da página de carteira virtual', () => {
     const submitEditBtn = screen.getByRole('button', { name: 'Editar despesa' });
     expect(submitEditBtn).toBeInTheDocument();
 
-    // userEvent.click(submitEditBtn);
+    userEvent.click(submitEditBtn);
+    console.log(table.children.length);
     // await waitFor(expect(totalField).toHaveTextContent('267.74'));
   });
 });
