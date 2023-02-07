@@ -22,16 +22,22 @@ class Header extends Component {
     const { email } = this.props;
     const totalField = this.handleTotalField();
     return (
-      <header>
+      <header
+        className="bg-neutral-100
+      shadow-xl
+      mb-10
+      p-10
+      flex
+      justify-around
+      items-center"
+      >
         {email
-          ? <p data-testid="email-field">{email}</p>
-          : <p data-testid="email-field">Usuário anônimo</p>}
+          ? <p className="text-green-500 text-lg" data-testid="email-field">{email}</p>
+          : <p className="text-orange-500" data-testid="email-field">Usuário anônimo</p>}
 
-        <div>
+        <div className="flex underline text-lg">
           Despesa total:
-          {' '}
           <p data-testid="total-field">{totalField}</p>
-          {' '}
           <span data-testid="header-currency-field">BRL</span>
         </div>
       </header>

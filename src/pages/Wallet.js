@@ -6,7 +6,7 @@ import WalletForm from '../components/WalletForm';
 class Wallet extends React.Component {
   render() {
     return (
-      <main>
+      <main className="bg-emerald-400 min-h-screen font-mono">
         <Header />
         <WalletForm />
         <Table />

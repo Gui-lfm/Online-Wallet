@@ -130,7 +130,7 @@ class WalletForm extends Component {
     const { currencies, editor } = this.props;
 
     return (
-      <form>
+      <form className="bg-neutral-200 p-8">
         <label htmlFor="valor">
           Valor:
           <input
