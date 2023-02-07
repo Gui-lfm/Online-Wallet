@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import logo from '../img/logo.png';
 
 class Header extends Component {
   handleTotalField = () => {
@@ -31,15 +32,24 @@ class Header extends Component {
       justify-around
       items-center"
       >
-        {email
-          ? <p className="text-green-500 text-lg" data-testid="email-field">{email}</p>
-          : <p className="text-orange-500" data-testid="email-field">Usuário anônimo</p>}
+        <img src={ logo } alt="trybe-wallet-logo" />
 
         <div className="flex underline text-lg">
           Despesa total:
           <p data-testid="total-field">{totalField}</p>
+          {' '}
           <span data-testid="header-currency-field">BRL</span>
         </div>
+
+        {email ? (
+          <p className="text-green-500 text-lg" data-testid="email-field">
+            {email}
+          </p>
+        ) : (
+          <p className="text-orange-500" data-testid="email-field">
+            Usuário anônimo
+          </p>
+        )}
       </header>
     );
   }

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchAPI, submitExpenses, submitEditedExpenses } from '../redux/actions';
+import * as s from '../utils/index';
 
 const baseTag = 'Alimentação';
 const baseCurrency = 'USD';
@@ -71,7 +72,6 @@ class WalletForm extends Component {
       tag,
       exchangeRates: currentRate,
     };
-
     this.setState(
       {
         value: '',
@@ -92,11 +92,9 @@ class WalletForm extends Component {
     e.preventDefault();
     const { value, selectedCurrency, method, description, tag, expenses } = this.state;
     const { expenses: Savedexpenses, idToEdit, sendEditedExpenses } = this.props;
-
     const selectedExpense = Savedexpenses.filter(
       (expense) => expense.id === idToEdit,
     )[0];
-
     const editedExpense = {
       id: selectedExpense.id,
       value,
@@ -109,108 +107,117 @@ class WalletForm extends Component {
     const expenseEdited = expenses.map(
       (expense) => (expense.id === editedExpense.id ? editedExpense : expense),
     );
-    this.setState({
-      expenses: expenseEdited,
-    }, () => {
-      const { expenses: editedExpenses } = this.state;
-      sendEditedExpenses(editedExpenses);
-      this.setState({
-        editForm: false,
-        value: '',
-        selectedCurrency: baseCurrency,
-        method: baseMethod,
-        description: '',
-        tag: baseTag,
-      });
-    });
+    this.setState(
+      {
+        expenses: expenseEdited,
+      },
+      () => {
+        const { expenses: editedExpenses } = this.state;
+        sendEditedExpenses(editedExpenses);
+        this.setState({
+          editForm: false,
+          value: '',
+          selectedCurrency: baseCurrency,
+          method: baseMethod,
+          description: '',
+          tag: baseTag,
+        });
+      },
+    );
   };
 
   render() {
     const { value, selectedCurrency, method, description, tag } = this.state;
     const { currencies, editor } = this.props;
-
     return (
-      <form className="bg-neutral-200 p-8">
-        <label htmlFor="valor">
-          Valor:
-          <input
-            value={ value }
-            name="value"
-            id="valor"
-            type="text"
-            data-testid="value-input"
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="moeda">
-          Moeda:
-          <select
-            value={ selectedCurrency }
-            name="selectedCurrency"
-            id="moeda"
-            data-testid="currency-input"
-            onChange={ this.handleChange }
-          >
-            {currencies
-              && currencies.map((currency) => (
-                <option key={ currency }>{currency}</option>
-              ))}
-          </select>
-        </label>
-
-        <label htmlFor="pagamento">
-          Método de pagamento:
-          <select
-            value={ method }
-            name="method"
-            id="pagamento"
-            data-testid="method-input"
-            onChange={ this.handleChange }
-          >
-            <option>Dinheiro</option>
-            <option>Cartão de crédito</option>
-            <option>Cartão de débito</option>
-          </select>
-        </label>
-
-        <label htmlFor="descricao">
-          Descrição:
-          <input
-            value={ description }
-            name="description"
-            id="descricao"
-            type="text"
-            data-testid="description-input"
-            onChange={ this.handleChange }
-          />
-        </label>
-
-        <label htmlFor="tag">
-          Tag:
-          <select
-            value={ tag }
-            name="tag"
-            id="tag"
-            data-testid="tag-input"
-            onChange={ this.handleChange }
-          >
-            <option>Alimentação</option>
-            <option>Lazer</option>
-            <option>Trabalho</option>
-            <option>Transporte</option>
-            <option>Saúde</option>
-          </select>
-        </label>
-        {editor ? (
-          <button type="submit" onClick={ this.handleEdit }>
-            Editar despesa
-          </button>
-        ) : (
-          <button type="submit" onClick={ this.handleSubmit }>
-            Adicionar despesa
-          </button>
-        )}
-      </form>
+      <div className={ s.classContainer }>
+        <form
+          className={ s.classForm }
+        >
+          <h1 className={ s.classTitle }>Adicione uma despesa</h1>
+          <label htmlFor="valor" className={ s.classLabel }>
+            Valor:
+            <input
+              value={ value }
+              name="value"
+              id="valor"
+              type="text"
+              data-testid="value-input"
+              onChange={ this.handleChange }
+              className={ s.classInput }
+            />
+          </label>
+          <label htmlFor="moeda" className={ s.classLabel }>
+            Moeda:
+            <select
+              value={ selectedCurrency }
+              name="selectedCurrency"
+              id="moeda"
+              data-testid="currency-input"
+              onChange={ this.handleChange }
+              className={ s.classInput }
+            >
+              {currencies
+                && currencies.map((currency) => (
+                  <option key={ currency }>{currency}</option>
+                ))}
+            </select>
+          </label>
+          <label htmlFor="pagamento" className={ s.classLabel }>
+            Método de pagamento:
+            <select
+              value={ method }
+              name="method"
+              id="pagamento"
+              data-testid="method-input"
+              onChange={ this.handleChange }
+              className={ s.classInput }
+            >
+              <option>Dinheiro</option>
+              <option>Cartão de crédito</option>
+              <option>Cartão de débito</option>
+            </select>
+          </label>
+          <label htmlFor="descricao" className={ s.classLabel }>
+            Descrição:
+            <input
+              value={ description }
+              name="description"
+              id="descricao"
+              type="text"
+              data-testid="description-input"
+              onChange={ this.handleChange }
+              className={ s.classInput }
+            />
+          </label>
+          <label htmlFor="tag" className={ s.classLabel }>
+            Tag:
+            <select
+              value={ tag }
+              name="tag"
+              id="tag"
+              data-testid="tag-input"
+              onChange={ this.handleChange }
+              className={ s.classInput }
+            >
+              <option>Alimentação</option>
+              <option>Lazer</option>
+              <option>Trabalho</option>
+              <option>Transporte</option>
+              <option>Saúde</option>
+            </select>
+          </label>
+          {editor ? (
+            <button type="submit" onClick={ this.handleEdit } className={ s.classBtn }>
+              Editar despesa
+            </button>
+          ) : (
+            <button type="submit" onClick={ this.handleSubmit } className={ s.classBtn }>
+              Adicionar despesa
+            </button>
+          )}
+        </form>
+      </div>
     );
   }
 }

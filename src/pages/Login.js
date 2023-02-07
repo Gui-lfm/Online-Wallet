@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { submitEmail } from '../redux/actions';
+import logo from '../img/logo.png';
 
 class Login extends Component {
   state = {
@@ -57,7 +58,7 @@ class Login extends Component {
       font-mono"
       >
         <form className="bg-neutral-200 p-12 rounded-xl shadow-lg ">
-          <h1 className="text-center mb-5 text-emerald-400 text-3xl">TrybeWallet</h1>
+          <img src={ logo } alt="trybe-wallet-logo" className="mb-5" />
           <label htmlFor="email" className="text-blue-800 mb-5">
             Email
             <input
