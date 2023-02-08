@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import logo from '../img/logo.png';
 
 class Header extends Component {
@@ -32,7 +33,9 @@ class Header extends Component {
       justify-around
       items-center"
       >
-        <img src={ logo } alt="trybe-wallet-logo" />
+        <Link to="/">
+          <img src={ logo } alt="trybe-wallet-logo" />
+        </Link>
 
         <div className="flex underline text-lg">
           Despesa total:

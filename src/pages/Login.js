@@ -109,7 +109,10 @@ class Login extends Component {
             rounded-md w-full
             text-neutral-50
             disabled:bg-blue-500
-            hover:bg-blue-900"
+            hover:bg-blue-900
+            ease-in-out
+            duration-300
+            "
             type="submit"
             disabled={ isSubmitBtnDisabled }
             onClick={ this.handleSubmit }
